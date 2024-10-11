@@ -102,12 +102,11 @@ contract CertichaManager is Ownable {
             // Mint certificate NFTs for each participant
         }
 
-        string memory tokenURI = string(abi.encodePacked(baseURI, _programId));
         certichaNFT.mintCertificates(
             recipient,
             participants,
             program.name,
-            tokenURI
+            baseURI
         );
 
         // certichaNFT.mintCertificates(recipient, participants, program.name);

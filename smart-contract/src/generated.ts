@@ -5,7 +5,10 @@
 export const certichaManagerAbi = [
   {
     type: 'constructor',
-    inputs: [{ name: '_owner', internalType: 'address', type: 'address' }],
+    inputs: [
+      { name: '_owner', internalType: 'address', type: 'address' },
+      { name: '_certichaNFT', internalType: 'address', type: 'address' },
+    ],
     stateMutability: 'nonpayable',
   },
   {
@@ -435,6 +438,7 @@ export const certichaNftAbi = [
       { name: 'recipient', internalType: 'address', type: 'address' },
       { name: 'names', internalType: 'string[]', type: 'string[]' },
       { name: 'programName', internalType: 'string', type: 'string' },
+      { name: 'tokenBaseURI', internalType: 'string', type: 'string' },
     ],
     name: 'mintCertificates',
     outputs: [],

@@ -101,7 +101,10 @@ contract CertichaNFT is ERC721, Ownable, ERC721URIStorage {
             _currentTokenId++;
             uint256 tokenId = _currentTokenId;
 
-            _setTokenURI(tokenId, tokenBaseURI);
+            string memory participantTokenURI = string(
+                abi.encodePacked(tokenBaseURI, tokenId)
+            );
+            _setTokenURI(tokenId, participantTokenURI);
 
             _safeMint(recipient, tokenId);
 
@@ -120,7 +123,6 @@ contract CertichaNFT is ERC721, Ownable, ERC721URIStorage {
     function getCertificateData(
         uint256 tokenId
     ) external view returns (string memory name, string memory programName) {
-        console.log("ownerOf(tokenId):", ownerOf(tokenId));
         if (ownerOf(tokenId) == address(0)) {
             revert CertificateDoesNotExist(tokenId);
         }
