@@ -14,7 +14,7 @@ import {
 } from "viem";
 import { base, baseSepolia } from "viem/chains";
 import { privateKeyToAccount } from "viem/accounts";
-
+import cors from "cors";
 import { getContract } from "viem";
 import { certichaManagerAbi } from "./generated";
 
@@ -51,6 +51,7 @@ export const app = express();
 app.set("port", process.env.PORT || 3000);
 app.use(express.json());
 app.use(logger("dev"));
+app.use(cors());
 
 app.use(express.static(path.join(__dirname, "../public")));
 
