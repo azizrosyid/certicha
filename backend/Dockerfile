@@ -5,6 +5,7 @@ FROM node:18 AS build
 WORKDIR /app
 
 # Copy package.json and package-lock.json (if present)
+COPY ./prisma prisma
 COPY package*.json ./
 
 # Install dependencies
@@ -26,12 +27,13 @@ WORKDIR /app
 
 # Copy the build output from Stage 1
 COPY --from=build /app/dist /app/dist
+COPY --from=build /app/prisma /app/prisma
 COPY package*.json ./
 
-RUN npx prisma generate
 # Install production dependencies only
 RUN npm install --only=production
 
+RUN npx prisma generate
 # Expose the port the app runs on
 EXPOSE 3000
 
