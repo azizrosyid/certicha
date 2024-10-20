@@ -17,6 +17,9 @@ import { privateKeyToAccount } from "viem/accounts";
 import cors from "cors";
 import { getContract } from "viem";
 import { certichaManagerAbi } from "./generated";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const PRIVATE_KEY = (process.env.PRIVATE_KEY || "0x000") as `0x${string}`;
 
@@ -55,24 +58,53 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, "../public")));
 
-app.post("/program", async (req, res) => {
+(BigInt.prototype as any).toJSON = function () {
+    return this.toString();
+};
+
+app.post("/program", async function (req, res) {
     try {
         const addProgram = await contract.write.addProgram([req.body.name]);
-        res.send(addProgram);
+        const programDB = await prisma.program.create({
+            data: {
+                name: req.body.name,
+                design: {},
+            },
+        });
+
+        res.status(200).json({ addProgram, programDB });
     } catch (e: any) {
         console.log(e);
         res.status(500).send(e.message);
     }
 });
 
-(BigInt.prototype as any).toJSON = function () {
-    return this.toString();
-};
+app.post("/design", async function (req, res) {
+    try {
+        const programDB = await prisma.program.update({
+            where: {
+                id: Number(req.body.programId),
+            },
+            data: {
+                design: req.body.design,
+            },
+        });
+
+        res.status(200).json({ programDB });
+    } catch (e: any) {
+        console.log(e);
+        res.status(500).send(e.message);
+    }
+});
 
 app.get("/program/:id", async (req, res) => {
     try {
-        const program = await contract.read.getProgram([BigInt(req.params.id)]);
-        res.send(program);
+        const programDB = await prisma.program.findUnique({
+            where: {
+                id: Number(req.params.id),
+            },
+        });
+        res.send(programDB);
     } catch (e: any) {
         console.log(e);
         res.status(500).send(e.message);
@@ -106,6 +138,8 @@ app.get("/certificate/:id", async (req, res) => {
         res.status(500).send(e.message);
     }
 });
+
+app.post("/design", async (req, res) => {});
 
 app.use((req, res, next) => {
     res.status(404).send("Sorry can't find that");

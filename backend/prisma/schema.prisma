@@ -8,32 +8,12 @@ datasource db {
 }
 
 model Program {
-  id                  Int                   @id @default(autoincrement())
-  name                String                @unique
-  certificates        Certificate[]
-  certificateTemplate CertificateTemplate[]
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-}
-
-model CertificateTemplate {
-  id               Int                @id @default(autoincrement())
-  program          Program?           @relation(fields: [programId], references: [id], onDelete: Cascade)
-  programId        Int?
-  metadataTemplate MetadataTemplate[]
-  templateName     String
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-}
-
-model MetadataTemplate {
-  id                    Int                  @id @default(autoincrement())
-  key                   String
-  value                 String
-  certificateTemplate   CertificateTemplate? @relation(fields: [certificateTemplateId], references: [id], onDelete: Cascade)
-  certificateTemplateId Int?
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  design       Json // Store the design template as JSON
+  certificates Certificate[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 model Certificate {
@@ -47,18 +27,7 @@ model Certificate {
   program   Program? @relation(fields: [programId], references: [id], onDelete: Cascade)
   programId Int?
 
-  metadata  Metadata[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-}
-
-model Metadata {
-  id    Int    @id @default(autoincrement())
-  key   String
-  value String
-
-  certificate   Certificate? @relation(fields: [certificateId], references: [id], onDelete: Cascade)
-  certificateId Int?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  metadata  Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

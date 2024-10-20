@@ -25,6 +25,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@prisma/client": "^5.21.1",
         "@types/cors": "^2.8.17",
         "@wagmi/connectors": "^5.1.15",
         "@wagmi/core": "^2.13.8",
@@ -38,7 +39,7 @@
         "viem": "^2.21.22"
     },
     "devDependencies": {
-        "@types/express": "5.0.0",
+        "@types/express": "^5.0.0",
         "@types/http-errors": "2.0.4",
         "@types/jest": "29.5.13",
         "@types/morgan": "1.9.9",
