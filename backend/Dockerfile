@@ -28,6 +28,7 @@ WORKDIR /app
 COPY --from=build /app/dist /app/dist
 COPY package*.json ./
 
+RUN npx prisma generate
 # Install production dependencies only
 RUN npm install --only=production
 
